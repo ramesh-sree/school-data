@@ -1,0 +1,38 @@
+const mongoose=require('mongoose');
+const connectDatabase=require('../database/db')
+const Topics=require('../models/topics');
+const chapters=require('../models/chapters');
+    
+
+module.exports.handler=async(event,context)=>{
+  //mongoose.connect('mongodb+srv://rameshsriramdas:rameshsriramdas@atlascluster.1zptzdw.mongodb.net/admin?retryWrites=true&w=majority')
+
+    try {
+        await connectDatabase();
+        const {ChName,TopicName,code ,videos }=JSON.parse(event.body)
+        
+        let topicObj={
+            
+            ChName,
+            TopicName, 
+            code,
+            videos
+        }
+        topicObj=(await Topics.create(topicObj));
+        await chapters.updateMany({ChName:topicObj.ChName},{$push:{topics:topicObj._id}})
+        
+        return{
+            statusCode:200,
+            body:JSON.stringify(topicObj)         
+        }
+    } catch (error) {
+        console.error(error);
+        return{
+            statusCode:error.statusCode ||500,
+            body:JSON.stringify({error:error.message})
+        }
+        
+    }
+
+
+  }

@@ -1,0 +1,280 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: school-data
+Transform:
+- AWS::Serverless-2016-10-31
+Resources:
+  createCourseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/createCourse.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /courses
+            Method: POST
+      CodeUri: createCourseFunction
+    Metadata:
+      SamResourceId: createCourseFunction
+  updateCourseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/updateCourseById.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /courses/{courseId}
+            Method: PATCH
+      CodeUri: updateCourseFunction
+    Metadata:
+      SamResourceId: updateCourseFunction
+  createBoardFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/createBoard.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /Board
+            Method: POST
+      CodeUri: createBoardFunction
+    Metadata:
+      SamResourceId: createBoardFunction
+  createChapterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/createChapters.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /Chapters
+            Method: POST
+      CodeUri: createChapterFunction
+    Metadata:
+      SamResourceId: createChapterFunction
+  createTopicsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/createTopics.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /Topics
+            Method: POST
+      CodeUri: createTopicsFunction
+    Metadata:
+      SamResourceId: createTopicsFunction
+  putChaptersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/putChapters.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /chapters/{chName}
+            Method: PUT
+      CodeUri: putChaptersFunction
+    Metadata:
+      SamResourceId: putChaptersFunction
+  getCourseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/getCourses.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /courses
+            Method: GET
+      CodeUri: getCourseFunction
+    Metadata:
+      SamResourceId: getCourseFunction
+  getCourseByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/courseId.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /courses/{courseId}
+            Method: GET
+      CodeUri: getCourseByIdFunction
+    Metadata:
+      SamResourceId: getCourseByIdFunction
+  getChapterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/getChapters.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /chapters
+            Method: GET
+      CodeUri: getChapterFunction
+    Metadata:
+      SamResourceId: getChapterFunction
+  getChapterFunctionById:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/chapterId.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /chapters/{chName}
+            Method: GET
+      CodeUri: getChapterFunctionById
+    Metadata:
+      SamResourceId: getChapterFunctionById
+  getBoardFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/getBoard.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /Board
+            Method: GET
+      CodeUri: getBoardFunction
+    Metadata:
+      SamResourceId: getBoardFunction
+  getTopicsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/getTopics.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /Topics
+            Method: GET
+      CodeUri: getTopicsFunction
+    Metadata:
+      SamResourceId: getTopicsFunction
+  deleteCourseByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/deleteCourseId.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /courses/{courseId}
+            Method: DELETE
+      CodeUri: deleteCourseByIdFunction
+    Metadata:
+      SamResourceId: deleteCourseByIdFunction
+  deleteTopicsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/deleteTopics.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /Topics/{topicCode}
+            Method: DELETE
+      CodeUri: deleteTopicsFunction
+    Metadata:
+      SamResourceId: deleteTopicsFunction
+  ApplicationResourceGroup:
+    Type: AWS::ResourceGroups::Group
+    Properties:
+      Name:
+        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
+      ResourceQuery:
+        Type: CLOUDFORMATION_STACK_1_0
+  ApplicationInsightsMonitoring:
+    Type: AWS::ApplicationInsights::Application
+    Properties:
+      ResourceGroupName:
+        Ref: ApplicationResourceGroup
+      AutoConfigurationEnabled: 'true'
+Outputs:
+  WebEndpoint:
+    Description: API Gateway endpoint URL for Prod stage
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/
+Globals:
+  Function:
+    Tracing: Active
+  Api:
+    TracingEnabled: true
