@@ -1,0 +1,199 @@
+
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  tset-assign
+
+
+Transform:
+- AWS::Serverless-2016-10-31
+
+Resources:
+  
+  putProjectDetailsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/project.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      
+      Policies:
+      
+      - DynamoDBCrudPolicy:
+          TableName: !Ref projectTable
+      
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /project
+            Method: POST
+  putEmployeeDetailsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/employee.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      Timeout: 100
+     
+      Policies:
+        
+      - DynamoDBCrudPolicy:
+          TableName: !Ref employeeTable
+      
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /employees
+            Method: POST
+  putRoleDetailsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/role.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      
+      Policies:
+        
+      - DynamoDBCrudPolicy:
+          TableName: !Ref roleTable
+      
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /roles
+            Method: POST          
+  mapEmployeeProjectFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/mapEmployeeProject.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      
+      Policies:
+        
+      - DynamoDBCrudPolicy:
+          TableName: !Ref mapTable
+      
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /mapEmployeeProject
+            Method: POST 
+  removeEmployeeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/removeEmployee.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      
+      Policies:
+        
+      - DynamoDBCrudPolicy:
+          TableName: !Ref mapTable
+      
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /removeEmployee/{employee}
+            Method: PUT          
+  deleteRoleFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/handlers/deleteRole.handler
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      MemorySize: 128
+      
+      Policies:
+        
+      - DynamoDBCrudPolicy:
+          TableName: !Ref mapTable
+      
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /deleteRole/{roleId}
+            Method: DELETE                    
+  projectTable:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - AttributeName: projectID
+          AttributeType: S
+      KeySchema: 
+        - AttributeName: projectID
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5 
+        WriteCapacityUnits: 5
+  employeeTable:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - AttributeName: employeeID
+          AttributeType: S
+      KeySchema: 
+        - AttributeName: employeeID
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5 
+        WriteCapacityUnits: 5 
+
+  roleTable:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - AttributeName: roleID
+          AttributeType: S
+      KeySchema: 
+        - AttributeName: roleID
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5 
+        WriteCapacityUnits: 5 
+
+  mapTable:
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      AttributeDefinitions: 
+        - AttributeName: roleID
+          AttributeType: S 
+      KeySchema: 
+        - AttributeName: roleID
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5 
+        WriteCapacityUnits: 5
+  ApplicationResourceGroup:
+    Type: AWS::ResourceGroups::Group
+    Properties:
+      Name:
+        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
+      ResourceQuery:
+        Type: CLOUDFORMATION_STACK_1_0
+  ApplicationInsightsMonitoring:
+    Type: AWS::ApplicationInsights::Application
+    Properties:
+      ResourceGroupName:
+        Ref: ApplicationResourceGroup
+      AutoConfigurationEnabled: 'true'
+Outputs:
+  WebEndpoint:
+    Description: API Gateway endpoint URL for Prod stage
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
