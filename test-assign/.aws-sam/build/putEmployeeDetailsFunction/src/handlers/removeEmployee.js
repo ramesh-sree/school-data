@@ -13,6 +13,7 @@ module.exports.handler=async(event,context)=>{
        UpdateExpression : "REMOVE roleID",
         ReturnValues : "UPDATED_NEW"
     };
+    try{
     await docClient.update(params).promise()
 
        response={
@@ -20,4 +21,11 @@ module.exports.handler=async(event,context)=>{
         'body':JSON.stringify({message: 'removed '})
        }
        return response
+    }catch (error) {
+      console.error(error);
+      return{
+          statusCode:error.statusCode ||500,
+          body:JSON.stringify({error:error.message})
+      } 
+    }
 }

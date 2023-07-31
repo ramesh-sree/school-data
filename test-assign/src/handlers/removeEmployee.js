@@ -3,7 +3,7 @@ const docClient=new dynamodb.DocumentClient()
 let response;
 
 module.exports.handler=async(event,context)=>{
-    
+  try{
     const employee=event.pathParameters.employee
     var params={
         TableName: 'employeeMap',
@@ -13,7 +13,7 @@ module.exports.handler=async(event,context)=>{
        UpdateExpression : "REMOVE roleID",
         ReturnValues : "UPDATED_NEW"
     };
-    try{
+    
     await docClient.update(params).promise()
 
        response={
